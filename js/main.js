@@ -483,7 +483,17 @@ function newQuestion() {
                   var offset = (i*24) + 2;
             }
             
-            firstnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'++'.png\'); right: '+ offset +'px;"></div>';
+            firstnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'+firstnumber_text[i]+'.png\'); right: '+ offset +'px;"></div>';
+      }
+      
+      for(var i = 0; i < firstnumber_text.length; i++ ) {
+         var offset = 0;
+         
+         if(i !== 0) {
+               var offset = (i*24) + 2;
+         }
+         
+         secondnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'+secondnumber_text[i]+'.png\'); right: '+ offset +'px;"></div>';
       }
       
       var questionhtml = '<div class = "question">'+firstnumber_digits+secondnumber_digits+'</div>';
