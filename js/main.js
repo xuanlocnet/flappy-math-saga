@@ -1,6 +1,6 @@
 /*
-   Copyright 2014 Nebez Briefkani
-   floppybird - main.js
+   Copyright 2014 Arron McLaughlin
+   flappy math saga - main.js
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ var jump = -4.6;
 var score = 0;
 var highscore = 0;
 
-var pipeheight = 90;
+var pipeheight = 250;
 var pipewidth = 52;
 var pipes = new Array();
 
@@ -138,7 +138,7 @@ function startGame()
    //start up our loops
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, 1400);
+   loopPipeloop = setInterval(updatePipes, 2000);
    
    //jump from the start!
    playerJump();
@@ -458,17 +458,53 @@ function playerScore()
    setBigScore();
 }
 
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+
+function newQuestion() {
+      
+      var firstnumber = randomIntFromInterval(1,12);
+      var secondnumber = randomIntFromInterval(1,12);
+      
+      //var answer = firstnumber * secondNumber;
+      
+      var firstnumber_text = firstnumber.toString();
+      var secondnumber_text = secondnumber.toString();
+      
+      var firstnumber_digits, secondnumber_digits = "";
+      
+      for(int i = 0; i < firstnumber_text.length; i++ ) {
+            var offset = 0;
+            
+            if(i !== 0) {
+                  var offset = (i*24) + 2;
+            }
+            
+            firstnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'++'.png\'); right: '+ offset +'px;"></div>';
+      }
+      
+      var questionhtml = '<div class = "question">'+firstnumber_digits+secondnumber_digits+'</div>';
+      
+      return {'questionhtml': questionhtml};
+}
+
 function updatePipes()
 {
    //Do any pipes need removal?
    $(".pipe").filter(function() { return $(this).position().left <= -100; }).remove()
    
    //add a new pipe (top height + bottom height  + pipeheight == 420) and put it in our tracker
-   var padding = 0;
+   var padding = 20;
    var constraint = 420 - pipeheight - (padding * 2); //double padding (for top and bottom)
    var topheight = Math.floor((Math.random()*constraint) + padding); //add lower padding
    var bottomheight = (420 - pipeheight) - topheight;
-   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div></div>');
+   var middleheight = pipeheight/3;
+   var middletop = topheight + pipeheight/3;
+   var newquestionhtml = newQuestion().questionhtml;
+   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="pipe_middle" style="height: ' + middleheight+ 'px; top: ' + middletop + 'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div>'+newquestionhtml+'</div>');
    $("#flyarea").append(newpipe);
    pipes.push(newpipe);
 }
