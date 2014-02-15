@@ -464,7 +464,7 @@ function updatePipes()
    $(".pipe").filter(function() { return $(this).position().left <= -100; }).remove()
    
    //add a new pipe (top height + bottom height  + pipeheight == 420) and put it in our tracker
-   var padding = 80;
+   var padding = 40;
    var constraint = 420 - pipeheight - (padding * 2); //double padding (for top and bottom)
    var topheight = Math.floor((Math.random()*constraint) + padding); //add lower padding
    var bottomheight = (420 - pipeheight) - topheight;
