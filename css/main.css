@@ -1,6 +1,6 @@
 /*
-   Copyright 2014 Nebez Briefkani
-   floppybird - main.css
+   Copyright 2014 Arron McLaughlin
+   flappy math saga - main.css
    
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -205,6 +205,7 @@ Screen - Game
    top: 20px;
    left: 150px;
    z-index: 100;
+   opacity: 0.4;
 }
 
 #bigscore img
@@ -315,7 +316,7 @@ Screen - Game
    height: 24px;
    background-image: url('../assets/bird.png');
    
-   -webkit-animation: animBird 300ms steps(4) infinite;
+   -webkit-animation: animBird 600ms steps(4) infinite;
    animation: animBird 300ms steps(4) infinite;
 }
 
@@ -369,6 +370,60 @@ Screen - Game
    width: 52px;
    height: 26px;
    background-image: url('../assets/pipe-up.png');
+}
+
+.pipe_middle
+{
+   position: absolute;
+   top: 0;
+   width: 52px;
+   background-image: url('../assets/pipe.png');
+   background-repeat: repeat-y;
+   background-position: center;
+}
+
+.pipe_middle:before
+{
+   content: "";
+   position: absolute;
+   top: 0;
+   width: 52px;
+   height: 26px;
+   background-image: url('../assets/pipe-up.png');
+}
+
+.pipe_middle:after
+{
+   content: "";
+   position: absolute;
+   bottom: 0;
+   width: 52px;
+   height: 26px;
+   background-image: url('../assets/pipe-down.png');
+}
+
+.question {
+    
+   position:absolute;
+   bottom: -70px;
+}
+
+.question_digit {
+    
+   width: 24px;
+   height: 36px;
+   background-image: url('../assets/font_big_0.png')
+    
+}
+
+
+.topanswertext {
+
+}
+
+.bottomanswertext {
+    
+    
 }
 
 #footer
