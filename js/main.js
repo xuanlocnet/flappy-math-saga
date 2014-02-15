@@ -476,7 +476,7 @@ function newQuestion() {
       
       var firstnumber_digits, secondnumber_digits = "";
       
-      for(int i = 0; i < firstnumber_text.length; i++ ) {
+      for(var i = 0; i < firstnumber_text.length; i++ ) {
             var offset = 0;
             
             if(i !== 0) {
