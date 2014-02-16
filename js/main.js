@@ -139,7 +139,7 @@ function startGame()
    //start up our loops
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, 2700);
+   loopPipeloop = setInterval(updatePipes, 2600);
       
    //jump from the start!
    playerJump();
@@ -545,7 +545,7 @@ function updatePipes()
    var correctguess = firstnumber * secondnumber;
    var smaller = Math.min(firstnumber,secondnumber);
    //var larger = Math.max(firstnumber,secondnumber);
-   var offset = smaller * randomIntFromInterval(1,10);
+   var offset = smaller * randomIntFromInterval(1,4);
    
    var incorrectguess = 0;
    
