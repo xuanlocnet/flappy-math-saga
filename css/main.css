@@ -324,7 +324,7 @@ Screen - Game
 {
    position: absolute;
    left: -100px;
-   width: 52px;
+   width: 100px;
    height: 100%;
    z-index: 10;
    
@@ -405,25 +405,33 @@ Screen - Game
 .question {
     
    position:absolute;
-   bottom: -70px;
+   bottom: -60px;
+   width: 300px;
+   left: -4px;
 }
 
 .question_digit {
     
    width: 24px;
    height: 36px;
-   background-image: url('../assets/font_big_0.png')
-    
+   position: relative;
+   float: left;
+   margin-left:4px;
 }
 
+.guess {
 
-.topanswertext {
-
+   position: absolute;
+   left: -4px;
+   opacity: 0.5;
 }
 
-.bottomanswertext {
-    
-    
+.guess_digit {
+   width: 24px;
+   height: 36px;
+   position: relative;
+   float: left;
+   margin-left:4px;
 }
 
 #footer
