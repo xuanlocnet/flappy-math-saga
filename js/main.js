@@ -35,7 +35,7 @@ var jump = -4.6;
 var score = 0;
 var highscore = 0;
 
-var pipeheight = 250; // the distance between top and bottom pipes including the middle pipe
+var pipeheight = 300; // the distance between top and bottom pipes including the middle pipe
 var pipewidth = 52;
 var pipes = new Array();
 
@@ -139,10 +139,12 @@ function startGame()
    //start up our loops
    var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, 2000);
-   
+   loopPipeloop = setInterval(updatePipes, 2700);
+      
    //jump from the start!
    playerJump();
+   
+   updatePipes();
 }
 
 function updatePlayer(player)
@@ -177,14 +179,14 @@ function gameloop() {
    var boxbottom = boxtop + boxheight;
    
    //if we're in debug mode, draw the bounding box
-   if(debugmode)
+   /*if(debugmode)
    {
       var boundingbox = $("#playerbox");
       boundingbox.css('left', boxleft);
       boundingbox.css('top', boxtop);
       boundingbox.css('height', boxheight);
       boundingbox.css('width', boxwidth);
-   }
+   }*/
    
    //did we hit the ground?
    if(box.bottom >= $("#land").offset().top)
@@ -216,7 +218,7 @@ function gameloop() {
    var pipeleft = nextpipeupper.offset().left - 2; // for some reason it starts at the inner pipes offset, not the outer pipes.
    var piperight = pipeleft + pipewidth;
    var pipebottom = pipetop + pipeheight;
-   
+   /*
    if(debugmode)
    {
       //TODO: fix debug mode bounding boxes to include middle pipe
@@ -227,7 +229,7 @@ function gameloop() {
       boundingbox.css('height', pipeheight);
       boundingbox.css('width', pipewidth);
    }
-   
+   */
    
    //have we gotten inside the pipe yet?
    if(boxright > pipeleft)
@@ -508,13 +510,13 @@ function updatePipes()
 
    //pipe skeleton
    
-   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="guess top" style="top: ' +(topheight + 20) + 'px;"></div><div class="pipe_middle" style="height: ' + middleheight+ 'px; top: ' + middletop + 'px;"></div><div class="guess bottom" style="bottom: '+(bottomheight+20)+'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div><div class="question"></div></div>');
+   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="guess top" style="top: ' +(topheight + 35) + 'px;"></div><div class="pipe_middle" style="height: ' + middleheight+ 'px; top: ' + middletop + 'px;"></div><div class="guess bottom" style="bottom: '+(bottomheight+35)+'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div><div class="question"></div></div>');
    
    //generate two random numbers
    
-   var firstnumber = randomIntFromInterval(1,14);
-   var secondnumber = randomIntFromInterval(1,14);
-           
+   var firstnumber = randomIntFromInterval(2,13);
+   var secondnumber = randomIntFromInterval(2,13);
+          
    var firstnumber_digits = firstnumber.toString().split('');
    var secondnumber_digits = secondnumber.toString().split('');
    
