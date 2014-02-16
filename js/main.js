@@ -15,6 +15,7 @@
    limitations under the License.
 */
 
+
 var debugmode = false;
 
 var states = Object.freeze({
@@ -34,7 +35,7 @@ var jump = -4.6;
 var score = 0;
 var highscore = 0;
 
-var pipeheight = 250;
+var pipeheight = 250; // the distance between top and bottom pipes including the middle pipe
 var pipewidth = 52;
 var pipes = new Array();
 
@@ -203,7 +204,13 @@ function gameloop() {
    
    //determine the bounding box of the next pipes inner area
    var nextpipe = pipes[0];
+      
    var nextpipeupper = nextpipe.children(".pipe_upper");
+   var nextpipemiddle = nextpipe.children(".pipe_middle");
+   
+   var middletop = nextpipemiddle.offset().top;
+   
+   var middlebottom = middletop + + nextpipemiddle.height();
    
    var pipetop = nextpipeupper.offset().top + nextpipeupper.height();
    var pipeleft = nextpipeupper.offset().left - 2; // for some reason it starts at the inner pipes offset, not the outer pipes.
@@ -212,6 +219,8 @@ function gameloop() {
    
    if(debugmode)
    {
+      //TODO: fix debug mode bounding boxes to include middle pipe
+
       var boundingbox = $("#pipebox");
       boundingbox.css('left', pipeleft);
       boundingbox.css('top', pipetop);
@@ -219,14 +228,35 @@ function gameloop() {
       boundingbox.css('width', pipewidth);
    }
    
+   
    //have we gotten inside the pipe yet?
    if(boxright > pipeleft)
    {
-      //we're within the pipe, have we passed between upper and lower pipes?
-      if(boxtop > pipetop && boxbottom < pipebottom)
+      //we're within the pipe, which pipes have we passed through?
+      
+      if(boxtop > pipetop && boxbottom < middletop)
       {
-         //yeah! we're within bounds
+         //we're in the top gap
+         if(nextpipe.correct === 1) {
+               //top guess is correct
+               //pass through
+         } else {
+               
+               playerDead();
+               return;
+         }
          
+      } else if(boxbottom < pipebottom && boxtop > middlebottom) {
+          
+         //we're in the bottom gap
+         if(nextpipe.correct === 0) {
+               //bottom guess is correct
+               //pass through
+         } else {
+     
+               playerDead();
+               return;
+         }
       }
       else
       {
@@ -463,44 +493,6 @@ function randomIntFromInterval(min,max)
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-
-function newQuestion() {
-      
-      var firstnumber = randomIntFromInterval(1,12);
-      var secondnumber = randomIntFromInterval(1,12);
-      
-      //var answer = firstnumber * secondNumber;
-      
-      var firstnumber_text = firstnumber.toString();
-      var secondnumber_text = secondnumber.toString();
-      
-      var firstnumber_digits, secondnumber_digits = "";
-      
-      for(var i = 0; i < firstnumber_text.length; i++ ) {
-            var offset = 0;
-            
-            if(i !== 0) {
-                  var offset = (i*24) + 2;
-            }
-            
-            firstnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'+firstnumber_text[i]+'.png\'); right: '+ offset +'px;"></div>';
-      }
-      
-      for(var i = 0; i < firstnumber_text.length; i++ ) {
-         var offset = 0;
-         
-         if(i !== 0) {
-               var offset = (i*24) + 2;
-         }
-         
-         secondnumber_digits+= '<div class = "question_digit" style = "background-image: url(\'../assets/font_big_'+secondnumber_text[i]+'.png\'); right: '+ offset +'px;"></div>';
-      }
-      
-      var questionhtml = '<div class = "question">'+firstnumber_digits+secondnumber_digits+'</div>';
-      
-      return {'questionhtml': questionhtml};
-}
-
 function updatePipes()
 {
    //Do any pipes need removal?
@@ -513,9 +505,88 @@ function updatePipes()
    var bottomheight = (420 - pipeheight) - topheight;
    var middleheight = pipeheight/3;
    var middletop = topheight + pipeheight/3;
-   var newquestionhtml = newQuestion().questionhtml;
-   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="pipe_middle" style="height: ' + middleheight+ 'px; top: ' + middletop + 'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div>'+newquestionhtml+'</div>');
+
+   //pipe skeleton
+   
+   var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="guess top" style="top: ' +(topheight + 20) + 'px;"></div><div class="pipe_middle" style="height: ' + middleheight+ 'px; top: ' + middletop + 'px;"></div><div class="guess bottom" style="bottom: '+(bottomheight+20)+'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div><div class="question"></div></div>');
+   
+   //generate two random numbers
+   
+   var firstnumber = randomIntFromInterval(1,14);
+   var secondnumber = randomIntFromInterval(1,14);
+           
+   var firstnumber_digits = firstnumber.toString().split('');
+   var secondnumber_digits = secondnumber.toString().split('');
+   
+   //append first number of question
+   
+   for(var i = 0; i<firstnumber_digits.length; i++) {
+         
+         var newdigit = $('<div class = "question_digit first" style = "background-image: url(\'assets/font_big_'+firstnumber_digits[i]+'.png\');"></div>');
+         newpipe.children(".question").append(newdigit);
+   }
+   
+   //append multiplication symbol
+   
+   newpipe.children(".question").append('<div class="question_digit symbol" style="background-image: url(\'assets/font_shitty_x.png\');"></div>');
+   
+   //append second number of question
+   
+   for(var i = 0; i<secondnumber_digits.length; i++) {
+         
+         var newdigit = $('<div class = "question_digit second" style = "background-image: url(\'assets/font_big_'+secondnumber_digits[i]+'.png\');"></div>');
+         newpipe.children(".question").append(newdigit);
+   }
+   
+   //generate a correct and incorrect guess
+   
+   var correctguess = firstnumber * secondnumber;
+   var guessoffset = randomIntFromInterval(-10, 10) + 1; // at least 1
+   var incorrectguess = Math.abs(correctguess + guessoffset); //no negative values
+   
+   //sometimes taking the absolute will generate two identical guesses
+   if(correctguess === incorrectguess) {
+         incorrectguess += randomIntFromInterval(1,10);
+   }   
+   
+   //flip a coin - 1: top is correct, 0: bottom is correct
+   var topguesscorrect = randomIntFromInterval(0,1);
+   
+   //append first guess
+   
+   correctguess_digits = correctguess.toString().split('');
+   incorrectguess_digits = incorrectguess.toString().split('');
+   
+   
+   for(var i = 0; i<correctguess_digits.length; i++) {
+         
+         var newdigit = $('<div class = "guess_digit" style = "background-image: url(\'assets/font_big_'+correctguess_digits[i]+'.png\');"></div>');
+         
+         if(topguesscorrect === 1) {
+            newpipe.children(".guess.top").append(newdigit);    
+         } else {
+               newpipe.children(".guess.bottom").append(newdigit);
+         }
+   }
+   
+   //append second guess
+   
+   for(var i = 0; i<incorrectguess_digits.length; i++) {
+         
+         var newdigit = $('<div class = "guess_digit" style = "background-image: url(\'assets/font_big_'+incorrectguess_digits[i]+'.png\');"></div>');
+         
+         if(topguesscorrect === 1) {
+            newpipe.children(".guess.bottom").append(newdigit);    
+         } else {
+               newpipe.children(".guess.top").append(newdigit);
+         }
+   }
+   
+   
    $("#flyarea").append(newpipe);
+   
+   newpipe.correct = topguesscorrect;
+      
    pipes.push(newpipe);
 }
 
