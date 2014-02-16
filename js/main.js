@@ -543,13 +543,20 @@ function updatePipes()
    //generate a correct and incorrect guess
    
    var correctguess = firstnumber * secondnumber;
-   var guessoffset = randomIntFromInterval(-10, 10) + 1; // at least 1
-   var incorrectguess = Math.abs(correctguess + guessoffset); //no negative values
+   var smaller = Math.min(firstnumber,secondnumber);
+   //var larger = Math.max(firstnumber,secondnumber);
+   var offset = smaller * randomIntFromInterval(1,10);
    
-   //sometimes taking the absolute will generate two identical guesses
-   if(correctguess === incorrectguess) {
-         incorrectguess += randomIntFromInterval(1,10);
-   }   
+   var incorrectguess = 0;
+   
+   if(randomIntFromInterval(0,1) === 1) {
+         incorrectguess = correctguess + offset;
+   } else {
+         incorrectguess = correctguess - offset;
+         if (incorrectguess <= 0) {
+               incorrectguess = correctguesss + offset; 
+         }
+   }
    
    //flip a coin - 1: top is correct, 0: bottom is correct
    var topguesscorrect = randomIntFromInterval(0,1);
