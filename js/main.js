@@ -1,6 +1,6 @@
 /*
-   Copyright 2014 Arron McLaughlin
-   flappy math saga - main.js
+   Copyright 2014 Nebez Briefkani
+   Floppy Bird - main.js
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
