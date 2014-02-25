@@ -1,10 +1,13 @@
 Flappy Math Saga
 =========
 A Flappy Bird clone that teaches you times tables.
+Ported to GopherJS
+
 
 Credits
 ------
 **[nebez](https://github.com/nebez)** Floppy Bird
+**[gopherjs](https://github.com/gopherjs/gopherjs)** GopherJS
 
 Notice
 =====
