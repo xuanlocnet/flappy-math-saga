@@ -6,8 +6,9 @@ Ported to GopherJS
 
 Credits
 ------
-**[nebez](https://github.com/nebez)** Floppy Bird
-**[gopherjs](https://github.com/gopherjs/gopherjs)** GopherJS
+- **[nebez](https://github.com/nebez)** Floppy Bird
+
+- **[gopherjs](https://github.com/gopherjs/gopherjs)** GopherJS
 
 Notice
 =====
