@@ -38,11 +38,11 @@ var (
 	replayclickable = false
 	//sounds
 	volume      = 30
-	soundJump   = js.Global("buzz").Get("sound").New("assets/sounds/sfx_wing.ogg")
-	soundScore  = js.Global("buzz").Get("sound").New("assets/sounds/sfx_point.ogg")
-	soundHit    = js.Global("buzz").Get("sound").New("assets/sounds/sfx_hit.ogg")
-	soundDie    = js.Global("buzz").Get("sound").New("assets/sounds/sfx_die.ogg")
-	soundSwoosh = js.Global("buzz").Get("sound").New("assets/sounds/sfx_swooshing.ogg")
+	soundJump   = js.Global.Get("buzz").Get("sound").New("assets/sounds/sfx_wing.ogg")
+	soundScore  = js.Global.Get("buzz").Get("sound").New("assets/sounds/sfx_point.ogg")
+	soundHit    = js.Global.Get("buzz").Get("sound").New("assets/sounds/sfx_hit.ogg")
+	soundDie    = js.Global.Get("buzz").Get("sound").New("assets/sounds/sfx_die.ogg")
+	soundSwoosh = js.Global.Get("buzz").Get("sound").New("assets/sounds/sfx_swooshing.ogg")
 	//eventIds
 	loopGameloop float64
 	loopPipeloop float64
@@ -52,7 +52,7 @@ func main() {
 
 	jQuery().Ready(func() {
 
-		if js.Global("window").Get("location").Get("search").String() == "?easy" {
+		if js.Global.Get("location").Get("search").String() == "?easy" {
 			pipeHeight = 200
 		}
 
@@ -74,10 +74,10 @@ func main() {
 func setStore(key string, val interface{}) {
 	byteArr, _ := json.Marshal(val)
 	str := string(byteArr)
-	js.Global("localStorage").Call("setItem", key, str)
+	js.Global.Get("localStorage").Call("setItem", key, str)
 }
 func getStore(key string, val interface{}) {
-	item := js.Global("localStorage").Call("getItem", key)
+	item := js.Global.Get("localStorage").Call("getItem", key)
 	if item.IsNull() {
 		val = nil
 		return
@@ -129,8 +129,8 @@ func startGame() {
 	//start up our loops
 	updaterate := 1000.0 / 60.0 //60 times/sec
 
-	loopGameloop = js.Global("window").Call("setInterval", gameloop, updaterate).Float()
-	loopPipeloop = js.Global("window").Call("setInterval", updatePipes, 2600).Float()
+	loopGameloop = js.Global.Call("setInterval", gameloop, updaterate).Float()
+	loopPipeloop = js.Global.Call("setInterval", updatePipes, 2600).Float()
 
 	//jump from the start!
 	playerJump()
@@ -156,7 +156,7 @@ func gameloop() {
 	updatePlayer(player)
 
 	//create the bounding boxtop
-	var box = js.Global("document").Call("getElementById", "player").Call("getBoundingClientRect")
+	var box = js.Global.Get("document").Call("getElementById", "player").Call("getBoundingClientRect")
 	var origwidth = 34.0
 	var origHeight = 24.0
 
@@ -245,7 +245,7 @@ func gameloop() {
 //Handle space bar
 func onKeyDown() {
 
-	jQuery(js.Global("document")).On(jQueryStatic.KEYDOWN, func(e jQueryStatic.Event) {
+	jQuery(js.Global.Get("document")).On(jQueryStatic.KEYDOWN, func(e jQueryStatic.Event) {
 		//space bar!
 
 		if e.KeyCode == 32 {
@@ -260,10 +260,10 @@ func onKeyDown() {
 
 	//Handle mouse down OR touch start
 	//2do: test on touch device !
-	if !js.Global("window").Get("ontouchstart").IsUndefined() {
-		jQuery(js.Global("document")).On(jQueryStatic.TOUCHSTART, screenClick)
+	if !js.Global.Get("ontouchstart").IsUndefined() {
+		jQuery(js.Global.Get("document")).On(jQueryStatic.TOUCHSTART, screenClick)
 	} else {
-		jQuery(js.Global("document")).On(jQueryStatic.MOUSEDOWN, screenClick)
+		jQuery(js.Global.Get("document")).On(jQueryStatic.MOUSEDOWN, screenClick)
 	}
 
 }
@@ -373,8 +373,8 @@ func playerDead() {
 	currentstate = STATESSCORESCREEN
 
 	//destroy our gameloops
-	js.Global("window").Call("clearInterval", loopGameloop)
-	js.Global("window").Call("clearInterval", loopPipeloop)
+	js.Global.Call("clearInterval", loopGameloop)
+	js.Global.Call("clearInterval", loopPipeloop)
 	loopGameloop = 0
 	loopPipeloop = 0
 
@@ -465,21 +465,21 @@ func playerScore() {
 
 func randomIntFromInterval(min, max int) int {
 
-	rnd := js.Global("Math").Call("random").Float()
+	rnd := js.Global.Get("Math").Call("random").Float()
 	maxplusmin := float64(max - min + 1)
 	rnd = rnd*maxplusmin + float64(min)
 	return int(math.Floor(rnd))
 }
 
 func random0to1() float64 {
-	return js.Global("Math").Call("random").Float()
+	return js.Global.Get("Math").Call("random").Float()
 }
 
 func updatePipes() {
 
 	//Do any pipes need removal?
 	jQuery(".pipe").Filter(func() bool {
-		return jQuery(js.This()).Position().Left <= -100
+		return jQuery(js.This).Position().Left <= -100
 	}).Remove()
 
 	//add a new pipe (top Height + bottom Height  + pipeHeight == 420) and put it in our tracker
