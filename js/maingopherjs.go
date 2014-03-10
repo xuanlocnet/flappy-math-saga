@@ -506,8 +506,8 @@ func updatePipes() {
 	var newpipe = jQuery(html)
 
 	//generate two random numbers
-	var firstnumber = randomIntFromInterval(2, 13)
-	var secondnumber = randomIntFromInterval(2, 13)
+	var firstnumber = randomIntFromInterval(2, 10)
+	var secondnumber = randomIntFromInterval(2, 10)
 
 	var firstnumber_digits = strings.Split(strconv.Itoa(firstnumber), "")
 	var secondnumber_digits = strings.Split(strconv.Itoa(secondnumber), "")
