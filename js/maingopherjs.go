@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/gopherjs/gopherjs/js"
-	jQueryStatic "github.com/rusco/jquery"
+	jQueryStatic "github.com/gopherjs/jquery"
 	"math"
 	"strconv"
 	"strings"
