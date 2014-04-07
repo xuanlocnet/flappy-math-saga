@@ -52,7 +52,7 @@ func main() {
 
 	jQuery().Ready(func() {
 
-		if js.Global.Get("location").Get("search").String() == "?easy" {
+		if js.Global.Get("location").Get("search").Str() == "?easy" {
 			pipeHeight = 200
 		}
 
@@ -82,7 +82,7 @@ func getStore(key string, val interface{}) {
 		val = nil
 		return
 	}
-	str := item.String()
+	str := item.Str()
 	json.Unmarshal([]byte(str), &val)
 }
 
